@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <script src="build/react.js"></script>
+    <script src="build/JSXTransformer.js"></script>
+</head>
+
+<body>
+    <div id="app"></div>
+    
+    <script type="text/jsx">
+   
+
+    var Message=React.createClass({
+        getInitialState:function(){
+            return{
+                text:"ssd"
+            }
+        },
+        handlerInput:function(){
+            this.setState({
+                text:this.refs.input.getDOMNode().value
+            })
+        },
+        handlerClick:function(){
+            React.findDOMNode(this.refs.input).focus()
+        },
+        render:function () {
+            return(
+                <div>
+                    <input type="text" onChange={this.handlerInput} ref="input"/>
+                    <br/>
+                    <h1>{this.state.text}</h1>
+                    <button onClick={this.handlerClick}>click</button>
+                </div>
+            )
+        }
+    })
+    React.render(
+        <Message />,
+        document.getElementById('app')
+    )
+</script>
+</body>
+
+
+</html>

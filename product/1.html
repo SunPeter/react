@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <script src="../build/react.js"></script>
+    <script src="../build/JSXTransformer.js"></script>
+    <script src="../build/jquery.min.js"></script>
+    <style>
+    *{
+        padding: 0;
+        margin: 0;
+    }
+    .not-avaiable{
+        color: red;
+        text-decoration: line-through;
+    }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+    </div>
+    <script type="text/jsx">
+        var FilterableProductTable =React.createClass({
+            getInitialState:function(){
+                return {
+                    checked:false
+                }
+            },
+            render:function () {
+                return (
+                    <div>
+                        <SearchBar checked={this.state.checked}/>
+                        <ProductTable product={this.props.product} checked={this.state.checked}/>
+                    </div>
+                )
+            }
+        });
+
+        var SearchBar =React.createClass({
+            handleFilter:function(e){
+                this.setState({
+                    checked:!this.state.checked
+                });
+            },
+            render:function(){
+                return (
+                    <div>
+                        <input type="search" placeholder="搜索"/>
+                        <br/>
+                        <input type="checkbox" onClick={this.handleFilter}/>只显示有货
+                    </div>
+                )
+            }
+        })
+
+        var ProductTable =React.createClass({
+            render:function(){
+                var product =this.props.product;
+                var productList=[],category="";
+                product.forEach(function(item,index){
+                    if(category != item.category){
+                        category = item.category;
+                        productList.push(<ProductCategoryRow category={category} key={"categoryRow"+index}/>)
+                    }
+                    productList.push(<ProductRow product={item} key={"productRow"+index}/>)
+                })
+                return (
+                    <table> 
+                        {productList}
+                    </table>
+                )
+            }
+        })
+
+        var ProductCategoryRow =React.createClass({
+            render:function(){
+                return (
+                    <tr>
+                        <td colSpan="2">{this.props.category}</td>
+                    </tr>
+                )
+            }
+        })
+
+        var ProductRow = React.createClass({
+            render:function(){
+                var product =this.props.product;
+                return (
+                    <tr>
+                        <td className={!product.stocked?"not-avaiable":""}>{product.name}</td>
+                        <td>{product.price}</td>
+                    </tr>
+                )
+            }
+        })
+
+        $.get("./data.json").then(function(data){
+            React.render(
+            <FilterableProductTable product={data.product}/>,document.getElementById("app"));
+        })
+        
+    </script>
+</body>
+
+</html>

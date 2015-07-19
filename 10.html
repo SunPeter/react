@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <script src="build/react-with-addons.js"></script>
+    <script src="build/JSXTransformer.js"></script>
+    <script src="build/jquery.min.js"></script>
+    <style>
+    .example-enter {
+      opacity: 0.01;
+      transition: opacity .5s ease-in;
+    }
+
+    .example-enter.example-enter-active {
+      opacity: 1;
+    }
+    </style>
+</head>
+
+<body>
+    <div id="app"></div>
+    
+    <script type="text/jsx">
+    var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+
+    var TodoList = React.createClass({
+      getDefaultProps:function(){
+    return{
+      url:"http://baidu.com"
+    }
+  },
+      loadCommentsFromServer: function() {
+    $.ajax({
+      url: this.props.url,
+      dataType: "json",
+      success: function(data) {
+        console.log(data)
+      }.bind(this),
+      error: function(xhr, status, err) {
+
+      }.bind(this)
+    });
+  },
+  componentDidMount: function() {
+    this.loadCommentsFromServer();
+  },
+      getInitialState: function() {
+        return {items: ['hello', 'world', 'click', 'me']};
+      },
+      handleAdd: function() {
+        var newItems =
+          this.state.items.concat([prompt('Enter some text')]);
+        this.setState({items: newItems});
+      },
+      handleRemove: function(i) {
+        var newItems = this.state.items;
+        newItems.splice(i, 1);
+        this.setState({items: newItems});
+      },
+      render: function() {
+        var items = this.state.items.map(function(item, i) {
+          return (
+            <div key={item} onClick={this.handleRemove.bind(this, i)}>
+              {item}
+            </div>
+          );
+        }.bind(this));
+        return (
+          <div>
+            <button onClick={this.handleAdd}>Add Item</button>
+            <ReactCSSTransitionGroup transitionName="example">
+              {items}
+            </ReactCSSTransitionGroup>
+          </div>
+        );
+      }
+    });
+
+    React.render(
+        <TodoList />,
+        document.getElementById('app')
+    )
+    </script>
+</body>
+
+
+</html> 

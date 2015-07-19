@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <script src="build/react-with-addons.js"></script>
+    <script src="build/JSXTransformer.js"></script>
+</head>
+
+<body>
+    <div id="app1"></div>
+    <div id="app2"></div>
+    <script type="text/jsx">
+    var MessageBox1=React.createClass({
+        getInitialState:function(){
+            return {
+               text:"ssd"
+            }
+        },
+        handlerChange:function(e){
+            var _text=e.target.value
+            this.setState({
+                text:_text
+            })
+        },
+		render:function(){
+           
+    		return (
+    			<div>
+                    <p>{this.state.text}</p>
+                    <input type="text" value={this.state.text} onChange={this.handlerChange}/>
+    			</div> 
+    		)
+    	}
+    })
+
+
+	React.render(
+	<MessageBox1 />,
+	document.querySelector("#app1")
+	)
+
+    var MessageBox2=React.createClass({
+        mixins: [React.addons.LinkedStateMixin],
+        getInitialState:function(){
+            return {
+               text:"ssd"
+            }
+        },
+        render:function(){
+           
+            return (
+                <div>
+                    <p >{this.state.text}</p>
+                    <input type="text" valueLink={this.linkState('text')}/>
+                    <ChildBox childText={this.linkState('text')}/>
+                </div> 
+            )
+        }
+    })
+    var ChildBox=React.createClass({
+        mixins: [React.addons.LinkedStateMixin],
+        getInitialState:function(){
+            return {
+               text:"ssd"
+            }
+        },
+        render:function(){
+            return (
+                <div>
+                    <p >{this.state.text}</p>
+
+                    <input type="text" valueLink={this.linkState('text')}/>
+                </div>
+            )
+        }
+    })
+
+    React.render(
+    <MessageBox2 />,
+    document.querySelector("#app2")
+    )
+
+</script>
+
+
+</body>
+
+
+</html>

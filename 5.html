@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <script src="build/react.js"></script>
+    <script src="build/JSXTransformer.js"></script>
+</head>
+
+<body>
+    <div id="app"></div>
+    
+    <script type="text/jsx">
+    var MessageBox=React.createClass({
+        getInitialState:function(){
+            return {
+               inputValue:"inputValue",
+               selectValue:"B",
+               radioValue:"C"
+            }
+        },
+        handlerClick:function(e){
+            console.log(e)
+        },
+        handlerForm:function(){
+
+        },
+        handlerinput:function(e){
+            this.setState({
+                inputValue:e.target.value
+            })
+        },
+        handlerSelect:function(e){
+            this.setState({
+                selectValue:e.target.value
+            })
+        },
+		render:function(){
+           
+    		return (
+    			<div>
+                    <form onSubmit={this.handlerForm}>
+                        <h1 onClick={this.handlerClick}>ssd</h1>
+                        <input type="text" value={this.state.inputValue} onChange={this.handlerinput}/>
+                        <br/>
+                        <select value={this.state.selectValue} onChange={this.handlerSelect}>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                        </select>
+                    </form>
+    			</div> 
+    		)
+    	}
+    })
+
+    
+
+	React.render(
+	<MessageBox />,
+	document.querySelector("#app")
+	)
+
+</script>
+</body>
+
+
+</html>

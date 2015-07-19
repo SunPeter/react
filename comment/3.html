@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <script src="../build/react.js"></script>
+    <script src="../build/JSXTransformer.js"></script>
+    <script src="jquery.min.js"></script>
+    <script src="../build/showdown.min.js"></script>
+</head>
+
+<body>
+<div id="app">
+
+</div>
+
+<script type="text/jsx">
+
+    var CommentList = React.createClass({
+       getInitialState:function(){
+        return {
+            data:[]
+        }
+       },
+       componentDidMount:function(){
+            $.ajax({
+              url: "./data.json",
+              dataType: 'json',
+              success: function(data) {
+                this.setState(data)
+              }.bind(this)
+            });
+       },
+       render:function(){
+       var commentList=this.state.data.map(function(item,index){
+        return <Comment author={item.author} key={index}>{item.comment}</Comment>
+       })
+          return (
+          <div>
+            {commentList}
+          </div>
+          )
+       }
+    });
+    var converter = new Showdown.converter();
+    var Comment =React.createClass({
+        render:function () {
+        var html =converter.makeHtml(this.props.children.toString());
+            return (
+                <div className="comment">
+                    <div className="author">作者:{this.props.author}</div>
+                    <div className="content" dangerouslySetInnerHTML={{__html:html}}/>
+                </div>
+            )
+        }
+    });
+
+
+    React.render(<CommentList/>,document.getElementById("app"));
+</script>
+</body>
+
+
+</html> 

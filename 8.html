@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <script src="build/react.js"></script>
+    <script src="build/JSXTransformer.js"></script>
+</head>
+
+<body>
+    <div id="app"></div>
+    
+    <script type="text/jsx">
+    var MessageBox=React.createClass({
+        getInitialState:function(){
+            return{
+                text:"world",
+                count:0
+            }
+        },
+        componentWillMount:function(){
+            console.log("componentWillMount")
+            this.setState({
+                text:"ssd"
+            })
+        },
+        componentDidMount:function(){
+            
+            console.log("componentDidMount")
+            
+        },
+        componentWillUpdate:function(nextProps,nextState){
+            console.log("componentWillUpdate")
+            // console.log(nextProps)
+            console.log(nextState)
+        },
+        componentDidUpdate:function(){
+            
+            console.log("componentDidUpdate")
+            
+        },
+        handlerClick:function(){
+            this.setState({
+                count:++this.state.count
+            })
+        },
+		render:function(){
+			console.log("render")
+    		return (
+    			<div>
+    				<h1>你好{this.state.text}</h1>
+    				<p>{this.state.count}</p>
+                    <a onClick={this.handlerClick}>点我</a>
+    			</div>
+    		)
+    	}
+    })
+
+    
+
+	React.render(
+	<MessageBox />,
+	document.querySelector("#app")
+	)
+
+</script>
+</body>
+
+
+</html>

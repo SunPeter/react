@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <script src="build/react.js"></script>
+    <script src="build/JSXTransformer.js"></script>
+</head>
+
+<body>
+    <div id="app"></div>
+    
+    <script type="text/jsx">
+    var MessageBox=React.createClass({
+        getInitialState:function(){
+            return {
+               
+            }
+        },
+		render:function(){
+            var  msgs=[
+            "asdada",
+            "asdasda"
+            ]
+    		return (
+    			<div>
+                    <h1>ssd</h1>
+                    <SubMessage message={msgs}/>
+    			</div>
+    		)
+    	}
+    })
+
+    var SubMessage=React.createClass({
+        propTypes:{
+            message:React.PropTypes.array.isRequired
+        },
+        getDefaultProps:function(){
+            return {
+                message:"默认的消息"
+            }
+        },
+        render:function(){
+            var msgs=this.props.message
+            var str=[]
+            msgs.forEach(function(item){
+                str.push("<h2>"+item+"</h2>")
+            })
+            return (
+                <div>
+                    <h3>写代码很有意思{str}</h3>
+                </div>
+            )
+        }
+    })
+
+	React.render(
+	<MessageBox />,
+	document.querySelector("#app")
+	)
+
+</script>
+</body>
+
+
+</html>

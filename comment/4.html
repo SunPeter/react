@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <script src="../build/react.js"></script>
+    <script src="../build/JSXTransformer.js"></script>
+    <script src="../build/jquery.min.js"></script>
+    <script src="../build/showdown.min.js"></script>
+</head>
+
+<body>
+<div id="app">
+
+</div>
+
+<script type="text/jsx">
+    
+    var CommentList = React.createClass({
+       getInitialState:function(){
+        return {
+            data:[]
+        }
+       },
+       loadData:function(){
+        var data=JSON.parse(sessionStorage.getItem("data"));
+         this.setState(data);
+     },
+       componentDidMount:function(){
+        $.ajax({
+              url: "./data.json",
+              dataType: 'json',
+              success: function(data) {
+                sessionStorage.setItem("data",JSON.stringify(data))
+                this.loadData();
+              }.bind(this)
+            });
+         setInterval(function(){
+            this.loadData()
+         }.bind(this),1000)
+       },
+       render:function(){
+            var commentList=this.state.data.map(function(item,index){
+                return <Comment author={item.author} key={index}>{item.comment}</Comment>
+            })
+          return (
+          <div>
+            {commentList}
+            <CommentForm />
+          </div>
+          )
+       }
+    });
+    var converter = new Showdown.converter();
+    var Comment =React.createClass({
+        render:function () {
+        var html =converter.makeHtml(this.props.children.toString());
+            return (
+                <div className="comment">
+                    <div className="author">作者:{this.props.author}</div>
+                    <div className="content" dangerouslySetInnerHTML={{__html:html}}/>
+                </div>
+            )
+        }
+    });
+
+
+    var CommentForm = React.createClass({
+        propTypes:{
+            author:React.PropTypes.string.isRequired,
+            comment:React.PropTypes.string.isRequired
+        },
+        getDefaultProps:function(){
+            return {
+                author:"",
+                comment:""
+            }
+        },
+        handleForm:function(e){
+            e.preventDefault();
+            var author=this.refs.author.getDOMNode(),
+            comment=this.refs.comment.getDOMNode();
+            var data={
+                author:author.value,
+                comment:comment.value
+            }
+            var db=JSON.parse(sessionStorage.getItem("data"));
+            db.data.push(data);
+            sessionStorage.setItem("data",JSON.stringify(db));
+        },
+        render:function(){
+            return(
+                <form onSubmit={this.handleForm}>
+                    <input type="text" name="author" ref="author" />
+                    <textarea name="comment" ref="comment"></textarea>
+                </form>
+            )
+        }
+    })
+
+    React.render(<CommentList/>,document.getElementById("app"));
+</script>
+</body>
+
+
+</html> 
