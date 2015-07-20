@@ -23,23 +23,46 @@
     </div>
     <script type="text/jsx">
         var FilterableProductTable =React.createClass({
+            handleFilter:function(checked){
+                this.setState({
+                    checked:checked,
+                    search:false
+                });
+            },
+            handleSearch:function(text){
+                this.setState({
+                    search:text
+                })
+            },
+            getInitialState:function(){
+                return {
+                    checked:false
+                }
+            },
             render:function () {
                 return (
                     <div>
-                        <SearchBar/>
-                        <ProductTable product={this.props.product}/>
+                        <SearchBar handleFilter={this.handleFilter} handleSearch={this.handleSearch}/>
+                        <ProductTable product={this.props.product} checked={this.state.checked} search={this.state.search}/>
                     </div>
                 )
             }
         });
 
         var SearchBar =React.createClass({
+            handleClick:function(e){
+                var value =e.target.checked;
+                this.props.handleFilter(value);
+            },
+            handleChange:function(e){
+                this.props.handleSearch(e.target.value);
+            },
             render:function(){
                 return (
                     <div>
-                        <input type="search" placeholder="搜索"/>
+                        <input type="search" placeholder="搜索" onChange={this.handleChange}/>
                         <br/>
-                        <input type="checkbox"/>只显示有货
+                        <input type="checkbox" onClick={this.handleClick}/>只显示有货
                     </div>
                 )
             }
@@ -48,17 +71,28 @@
         var ProductTable =React.createClass({
             render:function(){
                 var product =this.props.product;
+                var checked =this.props.checked;
+                var searchText =this.props.search;
                 var productList=[],category="";
                 product.forEach(function(item,index){
+                    if((checked && !item.stocked) || (searchText && item.name.indexOf(searchText) <0)){
+                        return;
+                    }
                     if(category != item.category){
                         category = item.category;
-                        productList.push(<ProductCategoryRow category={category} key={"categoryRow"+index}/>)
+                        productList.push(<ProductCategoryRow category={category} key={category}/>)
                     }
-                    productList.push(<ProductRow product={item} key={"productRow"+index}/>)
+                    productList.push(<ProductRow product={item} key={item.name}/>)
                 })
                 return (
-                    <table> 
-                        {productList}
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>{productList}</tbody>
                     </table>
                 )
             }
