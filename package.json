@@ -1,0 +1,27 @@
+{
+  "name": "reacttutorial",
+  "version": "1.0.0",
+  "description": "",
+  "main": "codelist.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SunPeter/react.git"
+  },
+  "keywords": [
+    "react"
+  ],
+  "author": "peter",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SunPeter/react/issues"
+  },
+  "homepage": "https://github.com/SunPeter/react#readme",
+  "dependencies": {
+    "koa": "^0.21.0",
+    "node-jsx": "^0.13.3",
+    "react": "^0.13.3"
+  }
+}
